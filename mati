@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Cliente</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 600px;
+            overflow: hidden;
+        }
+
+        .logo {
+            display: block;
+            margin: 20px auto;
+            max-width: 150px;
+            height: auto;
+        }
+
+        h1 {
+            color: #7c1e9a;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .progress-bar-container {
+            height: 10px;
+            background-color: #ddd;
+            width: 100%;
+            margin: 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #7c1e9a;
+            width: 0;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .form-step {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        label {
+            font-size: 26px; /* Aumenté el tamaño un 30% */
+            display: block;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 18px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, select:focus, textarea:focus {
+            border-color: #7c1e9a;
+            box-shadow: 0 0 8px rgba(124, 30, 154, 0.5);
+        }
+
+        button {
+            background-color: #7c1e9a;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #44d7d7;
+        }
+
+        .option-button {
+            width: 45%;
+            display: inline-block;
+            margin: 10px 2.5%;
+            background-color: #7c1e9a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option-button:hover {
+            background-color: #44d7d7;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .thank-you-message {
+            font-size: 24px;
+            color: #7c1e9a;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .transition-message {
+            font-size: 24px;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        .small-text {
+            font-size: 14px;
+            color: #777;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            label {
+                font-size: 22px;
+            }
+
+            input[type="text"], select, textarea {
+                font-size: 16px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+
+            .option-button {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <img src="https://i.ibb.co/1qbmrqG/Logo-final-formulario.png" alt="Logo" class="logo">
+        
+        <!-- Barra de Progreso -->
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <h1>Formulario de Cliente</h1>
+
+        <!-- Step 1 -->
+        <div class="form-step active" id="step-1">
+            <label for="cuil">1. ¿Cuál es tu CUIL?</label>
+            <input type="text" id="cuil" name="cuil" required>
+            <button type="button" onclick="nextStep(2)">Siguiente pregunta</button>
+            <div class="error-message" id="error-step-1"></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="form-step" id="step-2">
+            <label for="nombre">2. ¿Cuál es el nombre de tu negocio?</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <button type="button" onclick="nextStep(3)">Siguiente pregunta</button>
+            <div class="error-message" id="error-step-2"></div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="form-step" id="step-3">
+            <label for="dedica">3. ¿A qué se dedica tu negocio?</label>
+            <input type="text" id="dedica" name="dedica" required>
+            <button type="button" onclick="nextStep(4)">Siguiente pregunta</button>
+            <div class="error-message" id="error-step-3"></div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="form-step" id="step-4">
+            <label for="logo">4. ¿Tienes un logo para tu negocio?</label>
+            <button type="button" class="option-button" onclick="nextStep(5)">Sí</button>
+            <button type="button" class="option-button" onclick="nextStep(5)">No</button>
+            <div class="error-message" id="error-step-4"></div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="form-step" id="step-5">
+            <label for="fotos">5. ¿Tienes fotografías y descripciones listas para los productos?</label>
+            <button type="button" class="option-button" onclick="nextStep(6)">Sí</button>
+            <button type="button" class="option-button" onclick="nextStep(6)">No</button>
+            <div class="error-message" id="error-step-5"></div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="form-step" id="step-6">
+            <label for="variantes">6. ¿Necesitas que configuremos variantes de productos (tamaño, color, etc.)?</label>
+            <button type="button" class="option-button" onclick="nextStep(7)">Sí</button>
+            <button type="button" class="option-button" onclick="nextStep(7)">No</button>
+            <div class="error-message" id="error-step-6"></div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="form-step" id="step-7">
+            <label for="redes">7. ¿Tienes redes sociales que quieras integrar a la tienda?</label>
+            <button type="button" class="option-button" onclick="nextStep(8)">Sí</button>
+            <button type="button" class="option-button" onclick="nextStep(8)">No</button>
+            <div class="error-message" id="error-step-7"></div>
+        </div>
+
+        <!-- Step 8 -->
+        <div class="form-step" id="step-8">
+            <label for="material">8. ¿Cuentas con algún material adicional, como banners promocionales?</label>
+            <button type="button" class="option-button" onclick="nextStep(9)">Sí</button>
+            <button type="button" class="option-button" onclick="nextStep(9)">No</button>
+            <div class="error-message" id="error-step-8"></div>
+        </div>
+
+        <!-- Step 9 -->
+        <div class="form-step" id="step-9">
+            <label for="envios">9. ¿Necesitas integrar un sistema de envíos?</label>
+            <button type="button" class="option-button" onclick="nextStep(10)">Sí</button>
+            <button type="button" class="option-button" onclick="nextStep(10)">No</button>
+            <div class="error-message" id="error-step-9"></div>
+        </div>
+
+        <!-- Step 10 -->
+        <div class="form-step" id="step-10">
+            <label for="faq">10. ¿Te gustaría agregar un apartado de preguntas frecuentes?</label>
+            <button type="button" class="option-button" onclick="nextStep(11)">Sí</button>
+            <
+            <button type="button" class="option-button" onclick="nextStep(11)">No</button>
+            <div class="error-message" id="error-step-10"></div>
+        </div>
+
+        <!-- Step 11 -->
+        <div class="form-step" id="step-11">
+            <label for="experiencia">11. ¿Tienes experiencia previa usando tiendas online?</label>
+            <button type="button" class="option-button" onclick="nextStep(12)">Sí</button>
+            <button type="button" class="option-button" onclick="nextStep(12)">No</button>
+            <div class="error-message" id="error-step-11"></div>
+        </div>
+
+        <!-- Step 12 (Transition) -->
+<div class="form-step" id="step-12">
+    <div class="transition-message">
+        Solo unas preguntas más sobre tu información de contacto para que tus clientes puedan comunicarse con vos.
+    </div>
+    <button type="button" id="continuar-btn">Continuar</button>
+</div>
+
+<script>
+    // Agregamos un listener para que el botón 'Continuar' funcione correctamente
+    document.getElementById('continuar-btn').addEventListener('click', function() {
+        nextStep(13);  // Avanzamos al paso 13 cuando se haga clic
+    });
+</script>
+
+
+        <!-- Step 13 -->
+        <div class="form-step" id="step-13">
+            <label for="email">12. Mail de contacto</label>
+            <input type="text" id="email" name="email" required>
+            <div class="small-text">Este será el mail que tus clientes usarán para contactarte.</div>
+            <button type="button" onclick="nextStep(14)">Siguiente pregunta</button>
+            <div class="error-message" id="error-step-13"></div>
+        </div>
+
+        <!-- Step 14 -->
+        <div class="form-step" id="step-14">
+            <label for="whatsapp">13. WhatsApp</label>
+            <input type="text" id="whatsapp" name="whatsapp" required>
+            <div class="small-text">Este será el número de WhatsApp que tus clientes usarán para contactarte.</div>
+            <button type="button" onclick="nextStep(15)">Siguiente pregunta</button>
+            <div class="error-message" id="error-step-14"></div>
+        </div>
+
+        <!-- Step 15 -->
+        <div class="form-step" id="step-15">
+            <label for="showroom">14. ¿Tienes showroom o local?</label>
+            <button type="button" class="option-button" onclick="nextStep(16)">Sí</button>
+            <button type="button" class="option-button" onclick="nextStep(16)">No</button>
+            <div class="error-message" id="error-step-15"></div>
+        </div>
+
+        <!-- Step 16 (If Showroom) -->
+        <div class="form-step" id="step-16">
+            <label for="direccion">14. Dirección del local o showroom</label>
+            <input type="text" id="direccion" name="direccion">
+            <button type="button" onclick="submitForm()">Finalizar</button>
+            <div class="error-message" id="error-step-16"></div>
+        </div>
+
+        <!-- Thank You Message -->
+        <div class="thank-you-message" id="thank-you-message" style="display: none;">
+            ¡Gracias por completar el formulario! Nos pondremos en contacto pronto.
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 16;
+        const progressBar = document.getElementById('progress-bar');
+        
+        function nextStep(step) {
+            // Validar si el campo actual está completo antes de continuar
+            if (!validateStep(currentStep)) return;
+
+            // Ocultar paso actual
+            document.getElementById('step-' + currentStep).classList.remove('active');
+            
+            // Mostrar siguiente paso
+            document.getElementById('step-' + step).classList.add('active');
+            currentStep = step;
+
+            // Actualizar barra de progreso
+            updateProgressBar();
+
+            // Mostrar mensaje de "Gracias" si es el último paso
+            if (currentStep === totalSteps) {
+                setTimeout(() => {
+                    document.getElementById('thank-you-message').style.display = 'block';
+                }, 500);
+            }
+        }
+
+        function validateStep(step) {
+            const currentInput = document.querySelector('#step-' + step + ' input');
+            if (currentInput && currentInput.required && currentInput.value.trim() === '') {
+                document.getElementById('error-step-' + step).textContent = 'Este campo es obligatorio.';
+                return false;
+            }
+            document.getElementById('error-step-' + step).textContent = '';
+            return true;
+        }
+
+        function updateProgressBar() {
+            const progress = (currentStep / totalSteps) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        function submitForm() {
+            // Lógica para enviar el formulario
+            alert('Formulario enviado correctamente.');
+        }
+    </script>
+</body>
+</html>
